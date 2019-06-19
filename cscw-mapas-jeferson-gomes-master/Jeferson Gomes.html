@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8' />
+    <title></title>
+    <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+    <script src='https://api.mapbox.com/mapbox-gl-js/v0.50.0/mapbox-gl.js'></script>
+    <link href='https://api.mapbox.com/mapbox-gl-js/v0.50.0/mapbox-gl.css' rel='stylesheet' />
+    <link rel="stylesheet" type="text/css" href="res/style.css">
+    </head>
+<body>
+<div id='map'></div>
+<div id='features'>
+    <section id='welcome' class='active'>
+        <h3>Eu sou Jeferson Gomes e matrícula:0050012373</h3>
+        <p><img src="res/lasalle.jpg" height="100"><br/>Bem-vindo aos meus mapas.</p>
+    </section>
+    <section id='Meu1' class='active'>
+        <p class="timepoint">Junho de 2019</p>
+        <h3>Faculdade Lasalle</h3>
+        <p><img src="res/faculdade.jpg" width="350"><br/>Centro Universitário La Salle do Rio de Janeiro</p>
+    </section>    
+</div>
+<script>
+mapboxgl.accessToken = 'pk.eyJ1IjoiYWxleC1zYWxnYWRvIiwiYSI6ImNqbnc2OHdreTAwMXcza3B0bzdvOGZhZWEifQ.GAqMlYzetVlP7lb8eW7zUw';
+var map = new mapboxgl.Map({
+    container: 'map',
+    style: 'mapbox://styles/mapbox/streets-v10',
+        bearing: 0,
+        center: [-43.106408,-22.897656],
+        zoom: 17,
+        speed: 0.8,
+        pitch: 0
+});
+var chapters = {
+    'welcome': {
+        bearing: 0,
+        center: [-43.106408,-22.897656],
+        zoom: 17,
+        speed: 0.8,
+        pitch: 0
+    },
+    'Meu1': { //Meu1
+        bearing: 0,
+        center: [-43.106408,-22.897656],
+        zoom: 19,
+        pitch: 54.00
+    },
+   
+    'Ending': {
+        bearing: -0,
+        center: [21.563888, 51.315174],
+        zoom: 4,
+        speed: 0.8,
+        pitch: 24.00
+    },
+};
+// On every scroll event, check which element is on screen
+window.onscroll = function() {
+    var chapterNames = Object.keys(chapters);
+    for (var i = 0; i < chapterNames.length; i++) {
+        var chapterName = chapterNames[i];
+        if (isElementOnScreen(chapterName)) {
+            setActiveChapter(chapterName);
+            break;
+        }
+    }
+};
+var activeChapterName = '';
+function setActiveChapter(chapterName) {
+    if (chapterName === activeChapterName) return;
+    map.flyTo(chapters[chapterName]);
+    document.getElementById(chapterName).setAttribute('class', 'active');
+    document.getElementById(activeChapterName).setAttribute('class', '');
+    activeChapterName = chapterName;
+}
+function isElementOnScreen(id) {
+    var element = document.getElementById(id);
+    var bounds = element.getBoundingClientRect();
+    return bounds.top < window.innerHeight && bounds.bottom > 0;
+}
+</script>
+</body>
+</html>
